@@ -10,19 +10,19 @@ This pack is **derived from** the MIT-licensed [Expo `eas-app-stores` skill](htt
 
 Use the [skills CLI](https://github.com/vercel-labs/skills). Do not pipe remote scripts into a shell.
 
-After this repo is on GitHub:
-
 ```sh
-npx skills add <owner>/<repo> --skill eas-app-stores
+npx skills add Bohorques15/eas-skills --skill eas-app-stores
 ```
 
-From a local clone or this folder:
+From a local clone of this repo:
 
 ```sh
-npx skills add /path/to/EAS\ Skills --skill eas-app-stores
+npx skills add /path/to/eas-skills --skill eas-app-stores
 ```
 
 Then restart (or reopen) the AI assistant and ask it to use `eas-app-stores` for store builds and submissions.
+
+Repo: [Bohorques15/eas-skills](https://github.com/Bohorques15/eas-skills)
 
 ### Manual copy
 
