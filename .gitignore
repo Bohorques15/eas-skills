@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+.env
+.env.*
+!.env.example
+*.p12
+*.mobileprovision
+google-service-account.json
+AuthKey_*.p8
