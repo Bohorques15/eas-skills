@@ -1,0 +1,4 @@
+interface:
+  display_name: "Store Metadata"
+  short_description: "Analyze an app repo and generate the complete App Store / Play Console metadata artifact."
+  default_prompt: "Use $store-metadata ios (or $store-metadata android) to analyze this repository and generate store-metadata/index.html: every App Store Connect or Google Play Console field needed to publish, each marked INFERRED with file:line evidence, SUGGESTED with rationale, or HUMAN REQUIRED with the exact decision needed, plus EAS mappings when the repo uses EAS."

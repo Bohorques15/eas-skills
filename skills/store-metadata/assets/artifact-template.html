@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="store-metadata skill v1.0.0">
+<title>{{APP_NAME}} - {{PLATFORM}} Store Metadata</title>
+<!--
+TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read fully, then fill. Do not remove any instruction text until the block it describes has been processed.
+
+1. TOKENS. Replace every {{TOKEN}} below with a real value. No {{TOKEN}} may survive in the output.
+   Header and overview tokens:
+   - {{APP_NAME}} : app display name (from repo evidence or arguments)
+   - {{PLATFORM}} : "iOS", "Android", or "iOS + Android"
+   - {{GENERATED_DATE}} : generation date, YYYY-MM-DD
+   - {{ANALYZED_REPO}} : analyzed repository name or path
+   - {{FRAMEWORK}} : detected stack, e.g. "Expo SDK 53 / React Native", "bare React Native", "native Swift (SwiftUI)", "native Android (Kotlin)"
+   - {{LOCALE}} : target store locale, default "en-US"
+   - {{EAS_DETECTED}} : "Yes" or "No"
+   Counter tokens (count every statused value you emit; blocking = number of list items emitted):
+   - {{COUNT_INFERRED}} , {{COUNT_SUGGESTED}} , {{COUNT_HUMAN}} , {{COUNT_BLOCKING}}
+   Example tokens (they appear ONLY inside commented example rows and show where real content goes; replace the whole example comment with generated rows):
+   - {{EXAMPLE_FIELD}} , {{EXAMPLE_VALUE}} , {{EXAMPLE_EVIDENCE}} , {{EXAMPLE_PATH}}
+   - {{EXAMPLE_SUMMARY}} , {{EXAMPLE_LONG_VALUE}}
+   - {{EXAMPLE_BLOCKING_TITLE}} , {{EXAMPLE_BLOCKING_DETAIL}}
+   - {{EXAMPLE_EAS_FIELD}} , {{EXAMPLE_EAS_VALUE}}
+
+2. FILL BLOCKS. Each block is delimited by a start marker comment and an end marker comment:
+   &lt;!-- FILL:section-id --&gt; ... &lt;!-- /FILL:section-id --&gt;
+   Replace the ENTIRE block (both marker comments and the example comment inside them) with generated markup, one row per checklist field, imitating the example row markup shown in that block. Row styles:
+   - Style A (standard row): one &lt;tr&gt; with 5 cells: Field | value cell (.value, with its copy button) | status badge | evidence/rationale (.evidence) | console path (.path).
+   - Style B (long-content row): like A, but the .value cell wraps &lt;details&gt;&lt;summary&gt;{{EXAMPLE_SUMMARY}}&lt;/summary&gt;&lt;div class="long-value"&gt;{{EXAMPLE_LONG_VALUE}}&lt;/div&gt;&lt;/details&gt; with the copy button kept OUTSIDE the details element. Use for descriptions, keyword sets, permission copy, and review notes. Write real newlines inside .long-value; CSS preserves them.
+   - Style C (blocking item): &lt;li&gt; entries inside the Blocking decisions &lt;ol&gt;.
+   - Style D (EAS row): 3 cells: config key (&lt;code&gt;) | value (.value + copy button) | evidence/notes (.evidence).
+   Status badge markup (exact classes): &lt;span class="badge st-inferred"&gt;INFERRED&lt;/span&gt; , &lt;span class="badge st-suggested"&gt;SUGGESTED&lt;/span&gt; , &lt;span class="badge st-human"&gt;HUMAN REQUIRED&lt;/span&gt;.
+   Evidence cells: for INFERRED rows cite &lt;code&gt;file:line&lt;/code&gt;; for SUGGESTED rows give the rationale; for HUMAN REQUIRED rows state the exact decision needed.
+   Placeholder discipline: never emit real-looking URLs, emails, credentials, or account IDs that were not found in the repo. Use example.com-style placeholders and status HUMAN REQUIRED.
+
+3. SECTIONS. Fill only what applies:
+   - Keep the group &lt;div id="platform-ios"&gt; when generating for iOS and &lt;div id="platform-android"&gt; when generating for Android; delete the unused group wrapper entirely (both platforms means keep both).
+   - Inside a kept group, delete any &lt;section class="card"&gt; that does not apply to the analyzed app (for example #sec-ios-health when no HealthKit evidence, or #sec-android-government-apps with no government signal). Never delete #sec-ios-product-page or #sec-android-main-store-listing; assets are always required.
+   - EAS section (#eas-mapping-section): when EAS/Expo is detected, fill it with style D rows (see the checklist "EAS / Expo Mapping Summary" sections). When not detected, replace its FILL block with a single row stating that this project does not use EAS, that the artifact is complete for fully manual submission, and that each field's "Where to enter it" column is its console screen path; set {{EAS_DETECTED}} to "No".
+
+4. OUTPUT. Write the filled document to store-metadata/index.html at the analyzed repo root (or the path given in arguments). Keep it fully self-contained: no external CSS, JS, fonts, or images. Keep lang="en" unless the artifact language differs, in which case update the lang attribute. Write no other file into the analyzed repo.
+
+5. FILL-BLOCK INDEX (block id to checklist section, references/*.md of the store-metadata skill):
+   blocking-decisions (summary of top HUMAN REQUIRED rows) | ios-app-information (iOS §1) | ios-version-listing (iOS §2) | ios-review-information (iOS §3) | ios-pricing (iOS §4) | ios-app-privacy (iOS §5) | ios-health (iOS §6) | ios-product-page (iOS §7) | ios-export-compliance (iOS §8) | ios-age-rating (iOS §9) | ios-infoplist-usage (iOS §10) | android-main-store-listing (Android §1) | android-categorization (Android §2) | android-contact-details (Android §3) | android-data-safety (Android §4) | android-advertising-id (Android §5) | android-target-audience (Android §6) | android-ads-declaration (Android §7) | android-financial-features (Android §8) | android-government-apps (Android §9) | android-health-apps (Android §10) | android-app-access (Android §11) | android-permissions (Android §12) | android-release-mechanics (Android §13) | eas-mapping (iOS §11 / Android §14).
+-->
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #f4f6f8;
+  --card: #ffffff;
+  --text: #1c2128;
+  --muted: #59636e;
+  --line: #d8dee4;
+  --accent: #0969da;
+  --code-bg: #eff2f5;
+  --inferred-bg: #dafbe1;
+  --inferred-fg: #116329;
+  --suggested-bg: #ddf4ff;
+  --suggested-fg: #0a3069;
+  --human-bg: #fff8c5;
+  --human-fg: #7d4e00;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --text: #e6edf3;
+    --muted: #9198a1;
+    --line: #30363d;
+    --accent: #4493f8;
+    --code-bg: #21262d;
+    --inferred-bg: #12351d;
+    --inferred-fg: #7ee2a8;
+    --suggested-bg: #0c2d6b;
+    --suggested-fg: #8dc8ff;
+    --human-bg: #4a3208;
+    --human-fg: #f2cc60;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
+}
+.topbar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar h1 { margin: 0; font-size: 18px; }
+.sub {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.counters { display: flex; gap: 6px; flex-wrap: wrap; }
+.counter {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.badge-platform { background: var(--accent); color: #ffffff; }
+.st-inferred { background: var(--inferred-bg); color: var(--inferred-fg); }
+.st-suggested { background: var(--suggested-bg); color: var(--suggested-fg); }
+.st-human { background: var(--human-bg); color: var(--human-fg); }
+main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 0 0 22px;
+}
+.card h2 { margin: 0 0 4px; font-size: 17px; }
+.card h3 { margin: 0 0 4px; font-size: 15.5px; }
+.hint { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+.platform-title { margin: 30px 0 14px; font-size: 20px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th, td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+thead th {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  border-bottom: 2px solid var(--line);
+}
+td.value { min-width: 220px; max-width: 400px; }
+td.path, td.evidence { color: var(--muted); font-size: 12.5px; }
+.copy-btn {
+  margin-left: 8px;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1px 8px;
+  cursor: pointer;
+}
+.copy-btn:hover { border-color: var(--accent); }
+details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: var(--bg);
+  max-width: 100%;
+}
+summary { cursor: pointer; font-weight: 600; font-size: 12.5px; }
+.long-value { white-space: pre-wrap; margin-top: 8px; font-size: 13px; }
+.blocking-list { margin: 0; padding-left: 22px; }
+.blocking-list li { margin-bottom: 10px; }
+.blocking-list li strong { display: block; }
+.overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 20px;
+  margin: 0 0 12px;
+}
+.overview dt {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.overview dd { margin: 2px 0 0; font-size: 14px; font-weight: 600; }
+.notice {
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  background: var(--bg);
+}
+.footer-note p { margin: 6px 0; font-size: 13px; color: var(--muted); }
+@media print {
+  :root {
+    --bg: #ffffff;
+    --card: #ffffff;
+    --text: #000000;
+    --muted: #444444;
+    --line: #999999;
+    --code-bg: #f0f0f0;
+  }
+  .topbar { position: static; box-shadow: none; }
+  .copy-btn { display: none !important; }
+  .card { break-inside: avoid-page; page-break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+  details { border: none; background: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="title-block">
+      <h1>{{APP_NAME}}</h1>
+      <p class="sub">
+        <span class="badge badge-platform">{{PLATFORM}}</span>
+        <span>Store metadata artifact · generated {{GENERATED_DATE}}</span>
+      </p>
+    </div>
+    <div class="counters" aria-label="Field status summary">
+      <span class="counter st-inferred">INFERRED {{COUNT_INFERRED}}</span>
+      <span class="counter st-suggested">SUGGESTED {{COUNT_SUGGESTED}}</span>
+      <span class="counter st-human">HUMAN REQUIRED {{COUNT_HUMAN}}</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section class="card" id="blocking-decisions-section">
+  <h2>Blocking decisions ({{COUNT_BLOCKING}})</h2>
+  <p class="hint">Top HUMAN REQUIRED items that block store submission, most critical first. Resolve these before anything else.</p>
+  <ol class="blocking-list">
+    <!-- FILL:blocking-decisions -->
+    <!-- Example item (style C, fully worked). Delete this comment and emit one <li> per blocking decision (top 5):
+    <li>
+      <strong>{{EXAMPLE_BLOCKING_TITLE}}</strong>
+      {{EXAMPLE_BLOCKING_DETAIL}}
+    </li>
+    -->
+    <!-- /FILL:blocking-decisions -->
+  </ol>
+</section>
+
+<section class="card" id="overview">
+  <h2>Analysis overview</h2>
+  <dl class="overview">
+    <dt>Analyzed repo</dt>
+    <dd><code>{{ANALYZED_REPO}}</code></dd>
+    <dt>Framework</dt>
+    <dd>{{FRAMEWORK}}</dd>
+    <dt>Target locale</dt>
+    <dd>{{LOCALE}}</dd>
+    <dt>EAS detected</dt>
+    <dd>{{EAS_DETECTED}}</dd>
+  </dl>
+  <p class="hint">Status legend: <span class="badge st-inferred">INFERRED</span> value found in the repo, <code>file:line</code> cited · <span class="badge st-suggested">SUGGESTED</span> AI-drafted from analysis, rationale given · <span class="badge st-human">HUMAN REQUIRED</span> developer decision needed. Use each row's Copy button to paste the value straight into the console.</p>
+</section>
+
+<div id="platform-ios" data-platform="ios">
+<h2 class="platform-title">Apple App Store Connect (iOS)</h2>
+
+<section class="card" id="sec-ios-app-information">
+  <h3>App Information</h3>
+  <p class="hint">ASC → My Apps → [App] → App Information. App-level fields shared across versions. Checklist: references/ios-metadata-checklist.md §1. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-app-information -->
+      <!-- Example row (style A, fully worked). Delete this comment and emit one real <tr> per field:
+      <tr>
+        <td>{{EXAMPLE_FIELD}}</td>
+        <td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td>
+        <td><span class="badge st-inferred">INFERRED</span></td>
+        <td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td>
+        <td class="path">{{EXAMPLE_PATH}}</td>
+      </tr>
+      -->
+      <!-- /FILL:ios-app-information -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-version-listing">
+  <h3>Version — Listing and Build</h3>
+  <p class="hint">ASC → My Apps → [App] → App Store → [Version]. Checklist: references/ios-metadata-checklist.md §2. Row style B for Description, Keywords, and What's New; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-version-listing -->
+      <!-- Example row (style B, fully worked; long content collapses). Delete this comment and emit one real <tr> per field:
+      <tr>
+        <td>{{EXAMPLE_FIELD}}</td>
+        <td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td>
+        <td><span class="badge st-suggested">SUGGESTED</span></td>
+        <td class="evidence">{{EXAMPLE_EVIDENCE}}</td>
+        <td class="path">{{EXAMPLE_PATH}}</td>
+      </tr>
+      -->
+      <!-- /FILL:ios-version-listing -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-review-information">
+  <h3>App Review Information</h3>
+  <p class="hint">ASC → [Version] → App Review. Never emit real credentials; demo accounts are HUMAN REQUIRED. Checklist: references/ios-metadata-checklist.md §3. Row style B for Review notes; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-review-information -->
+      <!-- Example row (style B) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-review-information -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-pricing">
+  <h3>Pricing and Availability</h3>
+  <p class="hint">ASC → [Version] → Pricing and Availability. Business decisions: default to HUMAN REQUIRED. Checklist: references/ios-metadata-checklist.md §4. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-pricing -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-pricing -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-app-privacy">
+  <h3>App Privacy</h3>
+  <p class="hint">ASC → My Apps → [App] → App Privacy. One row per Apple data type; answers must match SDK/permission evidence and the privacy policy. Include tracking, IDFA/ATT, and nutrition-label rows. Checklist: references/ios-metadata-checklist.md §5. Row style A (style B for long declarations).</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-app-privacy -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-inferred">INFERRED</span></td><td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-app-privacy -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-health">
+  <h3>Health Apps (HealthKit)</h3>
+  <p class="hint">Keep only when HealthKit or health-data evidence exists; otherwise delete this whole section. Checklist: references/ios-metadata-checklist.md §6. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-health -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-health -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-product-page">
+  <h3>Product Page — Screenshots, Previews, Icon</h3>
+  <p class="hint">ASC → [Version] → Displays. One row per display class (6.9-inch iPhone required; 6.5/5.5 legacy; 13-inch iPad when iPad is supported), plus App Previews and the 1024x1024 icon. Checklist: references/ios-metadata-checklist.md §7. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-product-page -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-product-page -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-export-compliance">
+  <h3>Export Compliance</h3>
+  <p class="hint">Encryption declaration (ITSAppUsesNonExemptEncryption). Checklist: references/ios-metadata-checklist.md §8. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-export-compliance -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-export-compliance -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-age-rating">
+  <h3>Age Rating Questionnaire</h3>
+  <p class="hint">ASC → App Information → Age Rating. One row per questionnaire topic with the suggested answer. Checklist: references/ios-metadata-checklist.md §9. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-age-rating -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-age-rating -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-ios-infoplist-usage">
+  <h3>Info.plist Usage Descriptions (NS*UsageDescription)</h3>
+  <p class="hint">Purpose strings baked into the build (expo.ios.infoPlist or Info.plist), one row per key the app actually needs. Flag missing keys for used APIs as blocking. Checklist: references/ios-metadata-checklist.md §10. Row style B for drafted copy; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:ios-infoplist-usage -->
+      <!-- Example row (style B) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:ios-infoplist-usage -->
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<div id="platform-android" data-platform="android">
+<h2 class="platform-title">Google Play Console (Android)</h2>
+
+<section class="card" id="sec-android-main-store-listing">
+  <h3>Main Store Listing</h3>
+  <p class="hint">Play Console → Grow → Store presence → Main store listing. Checklist: references/android-metadata-checklist.md §1. Row style B for Full description; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-main-store-listing -->
+      <!-- Example row (style B) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-main-store-listing -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-categorization">
+  <h3>Categorization and Content Rating (IARC)</h3>
+  <p class="hint">Category/tags in Main store listing; questionnaire under Policy → App content → Content rating. Checklist: references/android-metadata-checklist.md §2. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-categorization -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-categorization -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-contact-details">
+  <h3>Contact Details and Privacy Policy</h3>
+  <p class="hint">Grow → Store presence → Contact details; Policy → App content → Privacy policy. Checklist: references/android-metadata-checklist.md §3. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-contact-details -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-contact-details -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-data-safety">
+  <h3>Data Safety</h3>
+  <p class="hint">Policy → App content → Data safety. One row per Google data type found in evidence; cover collected vs shared, required/optional, purposes, encryption in transit, deletion path, and third-party SDK sharing. Checklist: references/android-metadata-checklist.md §4. Row style B for long form answers; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-data-safety -->
+      <!-- Example row (style B) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-inferred">INFERRED</span></td><td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-data-safety -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-advertising-id">
+  <h3>Advertising ID</h3>
+  <p class="hint">AD_ID permission, opt-out zeroing policy, and Data Safety consistency. Checklist: references/android-metadata-checklist.md §5. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-advertising-id -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-inferred">INFERRED</span></td><td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-advertising-id -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-target-audience">
+  <h3>Target Audience and Content</h3>
+  <p class="hint">Policy → App content → Target audience and content. Age groups and children-policy consequences are HUMAN REQUIRED decisions. Checklist: references/android-metadata-checklist.md §6. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-target-audience -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-target-audience -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-ads-declaration">
+  <h3>Ads Declaration</h3>
+  <p class="hint">Policy → App content → Ads. "Contains ads" must match ad-SDK evidence exactly. Checklist: references/android-metadata-checklist.md §7. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-ads-declaration -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-inferred">INFERRED</span></td><td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-ads-declaration -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-financial-features">
+  <h3>Financial Features Declaration</h3>
+  <p class="hint">Keep only when financial-functionality signals exist (loans, payments, crypto, insurance, investing); otherwise delete this whole section. Compliance answers are HUMAN REQUIRED. Checklist: references/android-metadata-checklist.md §8. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-financial-features -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-financial-features -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-government-apps">
+  <h3>Government Apps</h3>
+  <p class="hint">Keep only when government-entity signals exist; otherwise delete this whole section. Verification is always HUMAN REQUIRED. Checklist: references/android-metadata-checklist.md §9. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-government-apps -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-government-apps -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-health-apps">
+  <h3>Health Apps (Play Policy)</h3>
+  <p class="hint">Keep only when Health Connect or health-data evidence exists; otherwise delete this whole section. Checklist: references/android-metadata-checklist.md §10. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-health-apps -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-suggested">SUGGESTED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-health-apps -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-app-access">
+  <h3>App Access (Reviewer Login) and Managed Publishing</h3>
+  <p class="hint">Policy → App content → App access. Test credentials are HUMAN REQUIRED; include a managed-publishing status note. Checklist: references/android-metadata-checklist.md §11. Row style B for instructions; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-app-access -->
+      <!-- Example row (style B) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-human">HUMAN REQUIRED</span></td><td class="evidence">{{EXAMPLE_EVIDENCE}}</td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-app-access -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-permissions">
+  <h3>AndroidManifest Permissions</h3>
+  <p class="hint">One row per permission found in evidence: dangerous (runtime rationale copy) and restricted (Play declaration form needed). Checklist: references/android-metadata-checklist.md §12. Row style B for rationale copy; style A otherwise.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-permissions -->
+      <!-- Example row (style B) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value"><details><summary>{{EXAMPLE_SUMMARY}}</summary><div class="long-value">{{EXAMPLE_LONG_VALUE}}</div></details> <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-inferred">INFERRED</span></td><td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-permissions -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-android-release-mechanics">
+  <h3>Pricing, Distribution, and Release Mechanics</h3>
+  <p class="hint">Monetize → Pricing and distribution; Release → tracks. AAB vs APK, versionName/versionCode, target API, tracks, staged rollout, Play App Signing. Checklist: references/android-metadata-checklist.md §13. Row style A.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Field</th>
+        <th scope="col">Suggested value</th>
+        <th scope="col">Status</th>
+        <th scope="col">Evidence / rationale</th>
+        <th scope="col">Where to enter it</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:android-release-mechanics -->
+      <!-- Example row (style A) - replace this comment with real rows: <tr><td>{{EXAMPLE_FIELD}}</td><td class="value">{{EXAMPLE_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td><td><span class="badge st-inferred">INFERRED</span></td><td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td><td class="path">{{EXAMPLE_PATH}}</td></tr> -->
+      <!-- /FILL:android-release-mechanics -->
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<section class="card" id="eas-mapping-section">
+  <h2>EAS / Expo Mapping</h2>
+  <p class="hint">EAS detected: {{EAS_DETECTED}}. When EAS/Expo is present, emit one row per submit/build/metadata config key (see the checklist "EAS / Expo Mapping Summary" sections). When absent, emit one row stating that this project does not use EAS and the artifact above is complete for fully manual submission using each field's "Where to enter it" console path. Row style D.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Config key / field</th>
+        <th scope="col">Value</th>
+        <th scope="col">Evidence / notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:eas-mapping -->
+      <!-- Example row (style D, fully worked). Delete this comment and emit one real <tr> per mapping:
+      <tr>
+        <td><code>{{EXAMPLE_EAS_FIELD}}</code></td>
+        <td class="value">{{EXAMPLE_EAS_VALUE}} <button type="button" class="copy-btn" aria-label="Copy value">Copy</button></td>
+        <td class="evidence"><code>{{EXAMPLE_EVIDENCE}}</code></td>
+      </tr>
+      -->
+      <!-- /FILL:eas-mapping -->
+    </tbody>
+  </table>
+</section>
+
+<footer class="card footer-note">
+  <p>Generated by the <strong>store-metadata</strong> skill (MIT) on {{GENERATED_DATE}} from <code>{{ANALYZED_REPO}}</code>. Fully self-contained: inline CSS and vanilla JS only, no network access.</p>
+  <p class="notice">Placeholders such as example.com URLs and 555 phone numbers are intentional. Resolve every HUMAN REQUIRED row before submitting to the store. This artifact is metadata guidance, not legal advice.</p>
+</footer>
+
+</main>
+
+<script>
+(function () {
+  "use strict";
+
+  function valueText(cell) {
+    var target = cell.querySelector(".long-value") || cell;
+    var clone = target.cloneNode(true);
+    var buttons = clone.querySelectorAll("button");
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].parentNode.removeChild(buttons[i]);
+    }
+    return (clone.textContent || "").trim();
+  }
+
+  function flash(btn, label) {
+    var original = btn.getAttribute("data-label") || btn.textContent;
+    btn.setAttribute("data-label", original);
+    btn.textContent = label;
+    window.setTimeout(function () {
+      btn.textContent = original;
+    }, 1500);
+  }
+
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch (err) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  var buttons = document.querySelectorAll(".copy-btn");
+  for (var i = 0; i < buttons.length; i++) {
+    (function (btn) {
+      btn.addEventListener("click", function () {
+        var host = btn.closest ? btn.closest("tr") : btn.parentElement;
+        if (!host) { host = btn.parentElement; }
+        var cell = host.querySelector ? host.querySelector(".value") : null;
+        var text = cell ? valueText(cell) : valueText(btn.parentElement || btn);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(
+            function () { flash(btn, "Copied"); },
+            function () { flash(btn, legacyCopy(text) ? "Copied" : "Copy failed"); }
+          );
+        } else {
+          flash(btn, legacyCopy(text) ? "Copied" : "Copy failed");
+        }
+      });
+    })(buttons[i]);
+  }
+
+  var openState = [];
+  window.addEventListener("beforeprint", function () {
+    var all = document.querySelectorAll("details");
+    openState = [];
+    for (var j = 0; j < all.length; j++) {
+      openState.push(all[j].open);
+      all[j].open = true;
+    }
+  });
+  window.addEventListener("afterprint", function () {
+    var all = document.querySelectorAll("details");
+    for (var j = 0; j < all.length && j < openState.length; j++) {
+      all[j].open = openState[j];
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

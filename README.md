@@ -45,6 +45,32 @@ npx skills add expo/skills
 
 See [Expo Skills docs](https://docs.expo.dev/skills/).
 
+## store-metadata skill
+
+`store-metadata` analyzes your REAL app repository (Expo, React Native, or native Swift/Kotlin) and generates ONE self-contained artifact, `store-metadata/index.html`, with every field App Store Connect (iOS) or Google Play Console (Android) requires to publish: listing copy, screenshot/icon specs, App Privacy and Data Safety answers, permission rationale copy, review/test-account info, age and content ratings, pricing, and release settings. Every value is marked **INFERRED** (with `file:line` evidence), **SUGGESTED** (with rationale), or **HUMAN REQUIRED** (with the exact decision needed). EAS is optional: the artifact is complete for fully manual submission, and adds `eas.json` mappings when the repo uses EAS. Unlike `eas-app-stores`, this skill is **original work of this pack** (MIT), not derived from Expo. It never modifies the analyzed repo — the artifact is the only file written.
+
+### Commands
+
+| Runtime | iOS | Android | Enable by |
+| --- | --- | --- | --- |
+| Claude Code | `/ios-metadata` | `/android-metadata` | Copy `.claude/commands/*.md` into your project (installing the skill alone also registers `/store-metadata`) |
+| OpenCode | `/ios-metadata` | `/android-metadata` | Copy `.opencode/commands/*.md` into your project |
+| Codex | `$store-metadata ios` | `$store-metadata android` | Nothing — native invocation once the skill is installed. Optional: copy `skills/store-metadata/prompts/codex/*.md` to `~/.codex/prompts/` for `/ios-metadata` and `/android-metadata` slash UX (a repo-committed `.codex/prompts/` is not loaded by Codex) |
+
+Arguments after the command are passed through: platform override, app-name hints, output path, and target locale (e.g. `/ios-metadata MyApp out/index.html es-MX`).
+
+### Install
+
+```sh
+npx skills add Bohorques15/eas-skills --skill store-metadata
+```
+
+Manual copy works like `eas-app-stores`: copy the whole `skills/store-metadata` folder to `.agents/skills/store-metadata`, `.claude/skills/store-metadata`, `.codex/skills/store-metadata`, `.opencode/skills/store-metadata`, or the user-wide equivalents (`~/.claude/skills/`, `~/.codex/skills/`, `~/.agents/skills/`, `~/.cursor/skills/`).
+
+### Output artifact
+
+`store-metadata/index.html` (at the analyzed repo root, or a path you pass) opens in any browser with no network access: sticky summary header, a "Blocking decisions" list, one table per console screen with per-value Copy buttons, collapsible long content, light/dark themes, and a print stylesheet so you can export it to PDF and use it as the submission checklist.
+
 ## Layout
 
 ```text
@@ -52,6 +78,14 @@ skills/eas-app-stores/
   SKILL.md
   agents/openai.yaml
   references/
+skills/store-metadata/
+  SKILL.md
+  agents/openai.yaml
+  assets/artifact-template.html
+  prompts/codex/
+  references/
+.claude/commands/       # /ios-metadata, /android-metadata (Claude Code)
+.opencode/commands/     # /ios-metadata, /android-metadata (OpenCode)
 ```
 
 ## License
