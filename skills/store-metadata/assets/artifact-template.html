@@ -25,7 +25,7 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
    - {{EXAMPLE_BLOCKING_TITLE}} , {{EXAMPLE_BLOCKING_DETAIL}}
    - {{EXAMPLE_EAS_FIELD}} , {{EXAMPLE_EAS_VALUE}}
 
-2. FILL BLOCKS. Each block is delimited by a start marker comment and an end marker comment:
+2. FILL BLOCKS. Fill every FILL block that remains after conditional-section removal (see SECTIONS and the [conditional] tags in the FILL-BLOCK INDEX). Each block is delimited by a start marker comment and an end marker comment:
    &lt;!-- FILL:section-id --&gt; ... &lt;!-- /FILL:section-id --&gt;
    Replace the ENTIRE block (both marker comments and the example comment inside them) with generated markup, one row per checklist field, imitating the example row markup shown in that block. Row styles:
    - Style A (standard row): one &lt;tr&gt; with 5 cells: Field | value cell (.value, with its copy button) | status badge | evidence/rationale (.evidence) | console path (.path).
@@ -38,13 +38,13 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
 
 3. SECTIONS. Fill only what applies:
    - Keep the group &lt;div id="platform-ios"&gt; when generating for iOS and &lt;div id="platform-android"&gt; when generating for Android; delete the unused group wrapper entirely (both platforms means keep both).
-   - Inside a kept group, delete any &lt;section class="card"&gt; that does not apply to the analyzed app (for example #sec-ios-health when no HealthKit evidence, or #sec-android-government-apps with no government signal). Never delete #sec-ios-product-page or #sec-android-main-store-listing; assets are always required.
+   - Inside a kept group, delete any &lt;section class="card"&gt; that does not apply to the analyzed app (for example #sec-ios-health when no HealthKit evidence, or #sec-android-government-apps with no government signal). Never delete #sec-ios-product-page or #sec-android-main-store-listing; assets are always required. Record each deleted section with its reason in the artifact footer.
    - EAS section (#eas-mapping-section): when EAS/Expo is detected, fill it with style D rows (see the checklist "EAS / Expo Mapping Summary" sections). When not detected, replace its FILL block with a single row stating that this project does not use EAS, that the artifact is complete for fully manual submission, and that each field's "Where to enter it" column is its console screen path; set {{EAS_DETECTED}} to "No".
 
 4. OUTPUT. Write the filled document to store-metadata/index.html at the analyzed repo root (or the path given in arguments). Keep it fully self-contained: no external CSS, JS, fonts, or images. Keep lang="en" unless the artifact language differs, in which case update the lang attribute. Write no other file into the analyzed repo.
 
-5. FILL-BLOCK INDEX (block id to checklist section, references/*.md of the store-metadata skill):
-   blocking-decisions (summary of top HUMAN REQUIRED rows) | ios-app-information (iOS §1) | ios-version-listing (iOS §2) | ios-review-information (iOS §3) | ios-pricing (iOS §4) | ios-app-privacy (iOS §5) | ios-health (iOS §6) | ios-product-page (iOS §7) | ios-export-compliance (iOS §8) | ios-age-rating (iOS §9) | ios-infoplist-usage (iOS §10) | android-main-store-listing (Android §1) | android-categorization (Android §2) | android-contact-details (Android §3) | android-data-safety (Android §4) | android-advertising-id (Android §5) | android-target-audience (Android §6) | android-ads-declaration (Android §7) | android-financial-features (Android §8) | android-government-apps (Android §9) | android-health-apps (Android §10) | android-app-access (Android §11) | android-permissions (Android §12) | android-release-mechanics (Android §13) | eas-mapping (iOS §11 / Android §14).
+5. FILL-BLOCK INDEX (block id to checklist section, references/*.md of the store-metadata skill). Blocks tagged [conditional] belong to sections kept only when their hint's keep-condition is met; otherwise delete the whole section per SECTIONS above and record the deletion with its reason in the artifact footer:
+   blocking-decisions (summary of top HUMAN REQUIRED rows) | ios-app-information (iOS §1) | ios-version-listing (iOS §2) | ios-review-information (iOS §3) | ios-pricing (iOS §4) | ios-app-privacy (iOS §5) | ios-health (iOS §6) [conditional] | ios-product-page (iOS §7) | ios-export-compliance (iOS §8) | ios-age-rating (iOS §9) | ios-infoplist-usage (iOS §10) | android-main-store-listing (Android §1) | android-categorization (Android §2) | android-contact-details (Android §3) | android-data-safety (Android §4) | android-advertising-id (Android §5) | android-target-audience (Android §6) | android-ads-declaration (Android §7) | android-financial-features (Android §8) [conditional] | android-government-apps (Android §9) [conditional] | android-health-apps (Android §10) [conditional] | android-app-access (Android §11) | android-permissions (Android §12) | android-release-mechanics (Android §13) | eas-mapping (iOS §11 / Android §14).
 -->
 <style>
 :root {

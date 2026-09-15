@@ -100,7 +100,7 @@ Console: `My Apps → [App] → App Privacy`. The privacy "nutrition label" is g
 
 ## 6. Health Apps (HealthKit)
 
-Applies only when HealthKit / health data evidence exists; otherwise mark the artifact section Not applicable.
+Applies only when HealthKit / health data evidence exists; otherwise the generating agent deletes the artifact section entirely per the template's conditional-section rule and records the omission and its reason in the artifact footer.
 
 | Field | Limits / format | Where in ASC | How to derive from repo | Status guidance | EAS / Expo mapping |
 | --- | --- | --- | --- | --- | --- |
