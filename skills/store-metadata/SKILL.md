@@ -38,7 +38,7 @@ Original work of this pack (MIT), not derived from Expo's `eas-app-stores`. Read
 
 ## Hard rules
 
-- Evidence first: every INFERRED value cites `file:line`.
+- Evidence first: every INFERRED value cites `file:line`. For generated/prebuild output (merged manifests, built `Info.plist`, config-plugin output), cite the full path and note that it is generated (untracked) output — never present it as a tracked source.
 - Do not modify the analyzed repo's source or config; the only file written is the artifact (plus nothing else).
 - If analysis is ambiguous, mark HUMAN REQUIRED rather than guess.
 - Placeholders only for credentials, emails, account IDs, and URLs not found in the repo.

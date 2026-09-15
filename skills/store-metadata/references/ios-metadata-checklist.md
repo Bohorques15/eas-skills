@@ -186,7 +186,7 @@ Every privacy-sensitive API requires a purpose string shown in the system permis
 | `NSAppleMusicUsageDescription` | Media library | Name the music-picker feature | `MPMediaPickerController` | `expo.ios.infoPlist.NSAppleMusicUsageDescription` |
 | `NSHomeKitUsageDescription` | HomeKit | Name the smart-home feature | `HMHomeManager` | `expo.ios.infoPlist.NSHomeKitUsageDescription` |
 
-Missing-key rule: if the code calls a protected API but the key is absent from `Info.plist`/`expo.ios.infoPlist`, flag it as a **blocking** finding (runtime crash + review rejection), status HUMAN REQUIRED with the exact key to add.
+Missing-key rule: if the code calls a protected API but the key is absent from `Info.plist`/`expo.ios.infoPlist`, flag it as a **blocking** finding (runtime crash + review rejection), status HUMAN REQUIRED with the exact key to add. Boilerplate rule: a key that exists only as Expo/plugin-injected generic English copy in the prebuilt `Info.plist` (e.g. a default `NSLocationWhenInUseUsageDescription`) is blocking-equivalent — Apple 5.1.1 rejects vague copy; draft feature-specific copy in the app's store language. Also audit injected keys with no corresponding feature usage and list them for removal (e.g. `NSLocationAlways*`, `NSMicrophoneUsageDescription` when unused).
 
 ## 11. EAS / Expo Mapping Summary
 

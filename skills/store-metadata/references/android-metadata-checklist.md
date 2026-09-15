@@ -90,7 +90,7 @@ For each declared data type, the form asks:
 
 | Item | Requirement | Detect from repo | Status guidance |
 | --- | --- | --- | --- |
-| `com.google.android.gms.permission.AD_ID` permission | Auto-merged into the manifest by `play-services-ads` and related Google SDKs when `targetSdk ≥ 33` | Grep manifest for `AD_ID`; check deps for `play-services-ads`, `react-native-google-mobile-ads`, AdMob config plugins | INFERRED from manifest/deps |
+| `com.google.android.gms.permission.AD_ID` permission | Auto-merged into the manifest by `play-services-ads` and related Google SDKs when `targetSdk ≥ 33` | Grep the merged manifest for `AD_ID`; check deps for `play-services-ads`, `react-native-google-mobile-ads`, AdMob config plugins | INFERRED from manifest/deps |
 | Play advertising-ID policy | When users opt out of Ads Personalization, the advertising ID must return zeros; using it despite opt-out violates policy and the User Data policy | Ad SDK config (`requestConfiguration` / tag-for-child-directed settings), consent flows (UMP SDK) | SUGGESTED compliance notes; consent-flow presence INFERRED or blocking HUMAN REQUIRED |
 | Data Safety consistency | If AD_ID is present, declare **Device or other IDs** in §4 and answer the ads-related questions accordingly | Derived from the two rows above | Consistency rule — never declare "no data" with ad SDKs installed |
 | No-ads alternative | Remove the permission via `tools:node="remove"` in the manifest or avoid SDKs that merge it; then declare no advertising ID use | Manifest merger directives | SUGGESTED when no ad SDK exists; INFERRED when a removal directive is present |
@@ -149,7 +149,7 @@ Console: `Policy → App content → App access`.
 
 ## 12. AndroidManifest Permissions
 
-Evidence sources: `AndroidManifest.xml` (`uses-permission`, `uses-feature`), `expo.android.permissions`, `app.json` plugins, config-plugin manifests, `build.gradle` deps. Every dangerous permission triggers a runtime prompt (API 23+) and a Play policy question; every restricted permission may require a declaration form.
+Evidence sources: `AndroidManifest.xml` (`uses-permission`, `uses-feature`), `expo.android.permissions`, `app.json` plugins, config-plugin manifests, `build.gradle` deps. Every dangerous permission triggers a runtime prompt (API 23+) and a Play policy question; every restricted permission may require a declaration form. Expo/bare-RN note: in Expo repositories `ios/` and `android/` are gitignored prebuild output — the checked-in template manifest and `expo.android.permissions` are INPUTS, not the final set. The authoritative source is the MERGED manifest under `android/app/build/intermediates/merged_manifests/` (release variant when available); confirm the build output exists or run prebuild before quoting merged values, and cite them with full path plus a generated-output note.
 
 ### 12a. Dangerous (runtime) permissions
 
