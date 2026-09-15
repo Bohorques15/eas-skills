@@ -16,8 +16,8 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
    - {{ANALYZED_REPO}} : analyzed repository name or path
    - {{FRAMEWORK}} : detected stack, e.g. "Expo SDK 53 / React Native", "bare React Native", "native Swift (SwiftUI)", "native Android (Kotlin)"
    - {{LOCALE}} : target store locale, default "en-US"
-   - {{EAS_DETECTED}} : "Yes" or "No"
-   Counter tokens (count every statused value you emit; blocking = number of list items emitted):
+   - {{EAS_DETECTED}} : display value localized to the artifact language, e.g. "Yes"/"No" (English) or "Sí"/"No" (Spanish)
+   Counter tokens (count only field-value status badges emitted inside the platform sections and the EAS mapping section; exclude the #overview legend badges; style-D EAS rows carry no status badge and are not counted; blocking = number of blocking list items emitted):
    - {{COUNT_INFERRED}} , {{COUNT_SUGGESTED}} , {{COUNT_HUMAN}} , {{COUNT_BLOCKING}}
    Example tokens (they appear ONLY inside commented example rows and show where real content goes; replace the whole example comment with generated rows):
    - {{EXAMPLE_FIELD}} , {{EXAMPLE_VALUE}} , {{EXAMPLE_EVIDENCE}} , {{EXAMPLE_PATH}}
@@ -32,7 +32,7 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
    - Style B (long-content row): like A, but the .value cell wraps &lt;details&gt;&lt;summary&gt;{{EXAMPLE_SUMMARY}}&lt;/summary&gt;&lt;div class="long-value"&gt;{{EXAMPLE_LONG_VALUE}}&lt;/div&gt;&lt;/details&gt; with the copy button kept OUTSIDE the details element. Use for descriptions, keyword sets, permission copy, and review notes. Write real newlines inside .long-value; CSS preserves them.
    - Style C (blocking item): &lt;li&gt; entries inside the Blocking decisions &lt;ol&gt;.
    - Style D (EAS row): 3 cells: config key (&lt;code&gt;) | value (.value + copy button) | evidence/notes (.evidence).
-   Status badge markup (exact classes): &lt;span class="badge st-inferred"&gt;INFERRED&lt;/span&gt; , &lt;span class="badge st-suggested"&gt;SUGGESTED&lt;/span&gt; , &lt;span class="badge st-human"&gt;HUMAN REQUIRED&lt;/span&gt;.
+   Status badge markup (exact classes): &lt;span class="badge st-inferred"&gt;INFERRED&lt;/span&gt; , &lt;span class="badge st-suggested"&gt;SUGGESTED&lt;/span&gt; , &lt;span class="badge st-human"&gt;HUMAN REQUIRED&lt;/span&gt;. Badge label text is the canonical English enum in every artifact language; localize only the surrounding prose.
    Evidence cells: for INFERRED rows cite &lt;code&gt;file:line&lt;/code&gt;; for SUGGESTED rows give the rationale; for HUMAN REQUIRED rows state the exact decision needed.
    Placeholder discipline: never emit real-looking URLs, emails, credentials, or account IDs that were not found in the repo. Use example.com-style placeholders and status HUMAN REQUIRED.
 
@@ -40,6 +40,7 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
    - Keep the group &lt;div id="platform-ios"&gt; when generating for iOS and &lt;div id="platform-android"&gt; when generating for Android; delete the unused group wrapper entirely (both platforms means keep both).
    - Inside a kept group, delete any &lt;section class="card"&gt; that does not apply to the analyzed app (for example #sec-ios-health when no HealthKit evidence, or #sec-android-government-apps with no government signal). Never delete #sec-ios-product-page or #sec-android-main-store-listing; assets are always required. Record each deleted section with its reason in the artifact footer.
    - EAS section (#eas-mapping-section): when EAS/Expo is detected, fill it with style D rows (see the checklist "EAS / Expo Mapping Summary" sections). When not detected, replace its FILL block with a single row stating that this project does not use EAS, that the artifact is complete for fully manual submission, and that each field's "Where to enter it" column is its console screen path; set {{EAS_DETECTED}} to "No".
+   - Hint text (&lt;p class="hint"&gt; lines): localize it to the artifact language and minimally adapt it for kept sections — for example, replace a keep-condition hint with the reason the section was kept.
 
 4. OUTPUT. Write the filled document to store-metadata/index.html at the analyzed repo root (or the path given in arguments). Keep it fully self-contained: no external CSS, JS, fonts, or images. Keep lang="en" unless the artifact language differs, in which case update the lang attribute. Write no other file into the analyzed repo.
 
