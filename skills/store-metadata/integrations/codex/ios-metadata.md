@@ -5,8 +5,9 @@ Find the `store-metadata` skill — first existing path wins:
 3. `.codex/skills/store-metadata/SKILL.md`
 4. `.opencode/skills/store-metadata/SKILL.md`
 5. `.agents/skills/store-metadata/SKILL.md`
-6. `~/.claude/skills/store-metadata/SKILL.md`
-7. `~/.agents/skills/store-metadata/SKILL.md`
+6. `~/.config/opencode/skills/store-metadata/SKILL.md`
+7. `~/.claude/skills/store-metadata/SKILL.md`
+8. `~/.agents/skills/store-metadata/SKILL.md`
 
 Read that `SKILL.md`, its `references/ios-metadata-checklist.md`, and its `assets/artifact-template.html`, then execute the skill workflow for platform `ios` against the current repository, writing the artifact to `store-metadata/index.html` (or the path given in the arguments).
 

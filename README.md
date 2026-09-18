@@ -53,9 +53,9 @@ See [Expo Skills docs](https://docs.expo.dev/skills/).
 
 | Runtime | iOS | Android | Enable by |
 | --- | --- | --- | --- |
-| Claude Code | `/ios-metadata` | `/android-metadata` | Copy `.claude/commands/*.md` into your project (installing the skill alone also registers `/store-metadata`) |
-| OpenCode | `/ios-metadata` | `/android-metadata` | Copy `.opencode/commands/*.md` into your project |
-| Codex | `$store-metadata ios` | `$store-metadata android` | Nothing — native invocation once the skill is installed. Optional: copy `skills/store-metadata/prompts/codex/*.md` to `~/.codex/prompts/` for `/ios-metadata` and `/android-metadata` slash UX (a repo-committed `.codex/prompts/` is not loaded by Codex) |
+| Claude Code | `/ios-metadata` | `/android-metadata` | Copy the two files from the installed skill's `integrations/claude-code/` into your project's `.claude/commands/` (installing the skill alone also registers `/store-metadata`) |
+| OpenCode | `/ios-metadata` | `/android-metadata` | Copy the two files from the installed skill's `integrations/opencode/` into your project's `.opencode/commands/` |
+| Codex | `$store-metadata ios` | `$store-metadata android` | Nothing — native invocation once the skill is installed. Optional: copy `integrations/codex/*.md` from the installed skill to `~/.codex/prompts/` for `/ios-metadata` and `/android-metadata` slash UX (a repo-committed `.codex/prompts/` is not loaded by Codex) |
 
 Arguments after the command are passed through: platform override, app-name hints, output path, and target locale (e.g. `/ios-metadata MyApp out/index.html es-MX`).
 
@@ -66,6 +66,26 @@ npx skills add Bohorques15/eas-skills --skill store-metadata
 ```
 
 Manual copy works like `eas-app-stores`: copy the whole `skills/store-metadata` folder to `.agents/skills/store-metadata`, `.claude/skills/store-metadata`, `.codex/skills/store-metadata`, `.opencode/skills/store-metadata`, or the user-wide equivalents (`~/.claude/skills/`, `~/.codex/skills/`, `~/.agents/skills/`, `~/.cursor/skills/`).
+
+### Enable the slash commands in another project
+
+The command wrappers ship **inside the skill folder** under `integrations/`, so `npx skills add` carries them everywhere. The skills CLI installs skills, not commands — activate the wrappers with one copy from wherever the skill landed (e.g. `~/.agents/skills/store-metadata/`, `.claude/skills/store-metadata/`):
+
+```sh
+# OpenCode — this project only
+mkdir -p .opencode/commands && cp ~/.agents/skills/store-metadata/integrations/opencode/*.md .opencode/commands/
+
+# OpenCode — all projects
+cp ~/.agents/skills/store-metadata/integrations/opencode/*.md ~/.config/opencode/commands/
+
+# Claude Code — this project only
+mkdir -p .claude/commands && cp .claude/skills/store-metadata/integrations/claude-code/*.md .claude/commands/
+
+# Codex — optional slash UX; $store-metadata ios|android works natively
+mkdir -p ~/.codex/prompts && cp ~/.codex/skills/store-metadata/integrations/codex/*.md ~/.codex/prompts/
+```
+
+Restart the assistant afterwards — command files load at session start.
 
 ### Output artifact
 
@@ -100,10 +120,10 @@ skills/store-metadata/
   SKILL.md
   agents/openai.yaml
   assets/artifact-template.html
-  prompts/codex/
+  integrations/          # command wrappers per runtime (travel with the skill)
   references/
-.claude/commands/       # /ios-metadata, /android-metadata (Claude Code)
-.opencode/commands/     # /ios-metadata, /android-metadata (OpenCode)
+.claude/commands/       # /ios-metadata, /android-metadata (pointer files, pack dogfood)
+.opencode/commands/     # /ios-metadata, /android-metadata (pointer files, pack dogfood)
 ```
 
 ## License

@@ -4,7 +4,7 @@ description: "Trigger: /ios-metadata, /android-metadata, $store-metadata, App St
 license: MIT
 metadata:
   author: "Lyon Incode"
-  version: "1.1.1"
+  version: "1.2.0"
 ---
 
 # Store Metadata Generator
