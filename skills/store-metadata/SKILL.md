@@ -1,13 +1,15 @@
 ---
 name: store-metadata
-description: Analyze the current app repository and generate one complete, self-contained store metadata artifact (store-metadata/index.html) covering every field App Store Connect (iOS) or Google Play Console (Android) requires to publish. Invoke via /ios-metadata, /android-metadata, or $store-metadata ios|android. Works with Expo, React Native, and native Swift/Kotlin apps. EAS is optional — the artifact is complete for fully manual submission and adds EAS mappings when the repo uses EAS. Use for store listing metadata, console field checklists, App Privacy and Data Safety answers, permission rationale copy, screenshot and icon specs, keywords and ASO copy.
-version: 1.0.0
+description: "Trigger: /ios-metadata, /android-metadata, $store-metadata, App Store Connect, Play Console, App Privacy, Data Safety, ASO. Analyze the app repo and generate a complete store-metadata/index.html artifact for manual or EAS submission."
 license: MIT
+metadata:
+  author: "Lyon Incode"
+  version: "1.0.1"
 ---
 
 # Store Metadata Generator
 
-One purpose: analyze the developer's REAL app repository and generate ONE self-contained artifact — `store-metadata/index.html` — with every piece of metadata needed to publish to Apple App Store Connect (iOS) or Google Play Console (Android). The artifact is complete for fully manual store submission; EAS mappings are added only when the repo actually uses EAS/Expo.
+One purpose: analyze the developer's REAL app repository and generate ONE self-contained artifact — `store-metadata/index.html` — with every piece of metadata needed to publish to Apple App Store Connect (iOS) or Google Play Console (Android). The artifact is complete for fully manual store submission; EAS mappings are added only when the repo actually uses EAS/Expo. Works with Expo, React Native, and native Swift/Kotlin apps.
 
 Original work of this pack (MIT), not derived from Expo's `eas-app-stores`. Read-only on the analyzed repo: the ONLY file written is the artifact.
 
