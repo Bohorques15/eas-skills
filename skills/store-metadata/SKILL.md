@@ -23,11 +23,7 @@ Original work of this pack (MIT), not derived from Expo's `eas-app-stores`. Read
 ## Workflow
 
 1. **Detect platform and framework.** Expo (`app.json`, `app.config.ts/js`, `expo` in `package.json`); bare React Native (`react-native` dep + `android/`, `ios/`); native iOS (`*.xcodeproj`, `Info.plist`); native Android (`AndroidManifest.xml`, `build.gradle(.kts)`). Record which apply — detection drives every later step.
-2. **Gather evidence.** Inspect, per platform:
-   - App config: name, slug, `bundleIdentifier` / `package` (applicationId), version, `buildNumber`/`versionCode`, icon, splash, plugins, `expo.ios.infoPlist`, `expo.android.permissions`.
-   - Native iOS: `NS*UsageDescription` keys in `Info.plist`, `CFBundle*` and `PRODUCT_BUNDLE_IDENTIFIER` in `project.pbxproj`, entitlements, `Podfile`.
-   - Native Android: `AndroidManifest.xml` permissions/intents, `strings.xml`, signing and version config in gradle files.
-   - Source code + dependency manifests (`package.json`, `Podfile`, `build.gradle`) for feature/SDK usage: camera, microphone, location, contacts, photos, health (HealthKit / Health Connect), payments and IAP, push notifications, analytics, ad SDKs (AdMob, AppLovin, Facebook Ads), social login, WebViews, deep links, encryption libs.
+2. **Gather evidence.** Inspect the analyzed repo per platform following [references/evidence-sources.md](references/evidence-sources.md): app config, native iOS/Android build files and manifests, and a source + dependency scan for feature/SDK usage. Cite every finding as you collect it.
 3. **Fill every checklist field** from [references/ios-metadata-checklist.md](references/ios-metadata-checklist.md) and/or [references/android-metadata-checklist.md](references/android-metadata-checklist.md). Status each value:
    - `INFERRED` — found in the repo; cite evidence as `file:line`.
    - `SUGGESTED` — AI-drafted from the analysis; give the rationale.
@@ -36,7 +32,7 @@ Original work of this pack (MIT), not derived from Expo's `eas-app-stores`. Read
    Never invent URLs, account IDs, demo credentials, or legal claims; use clearly-marked placeholders such as `https://example.com/privacy-policy` flagged HUMAN REQUIRED. Privacy and data-safety answers MUST be consistent with the SDK/permission evidence actually found.
 4. **Render the artifact.** Copy [assets/artifact-template.html](assets/artifact-template.html), replace every `{{TOKEN}}` and every `<!-- FILL:section-id -->` block per the instructions comment inside it, delete unused platform sections, and write to `store-metadata/index.html` at the analyzed repo root (or the path from arguments). Keep the output self-contained: no external CSS, JS, or fonts. Both-platform artifacts regularly exceed 100 KB; when the write tool enforces a payload limit, assemble the file with sequential chunked writes (create + append) and verify completeness (no leftover tokens or FILL markers) at the end.
    - Artifact language: English by default. If the analyzed repo's primary language (UI copy, store-facing text) is clearly non-English, generate the artifact in that language. An explicit locale in arguments or an explicit user request overrides both. In every language: status badge labels stay the canonical English enum (INFERRED / SUGGESTED / HUMAN REQUIRED), console navigation paths and config keys stay verbatim, and Apple/Google reviewer-facing notes stay in English because store reviewers read English.
-5. **EAS mapping (optional).** When `eas.json`/Expo is detected, fill the artifact's EAS section: `eas.json` submit config keys, `expo.ios.infoPlist` suggested additions, the Play service-account key (`serviceAccountKeyPath`, historically `googleServicesAccount`), `track`, `releaseStatus`, and metadata delivery via `eas submit` / `eas metadata` / ASC API / Play API. When absent, the section states the artifact is fully manual — every field row already carries its console screen path.
+5. **EAS mapping (optional).** When `eas.json`/Expo is detected, fill the artifact's EAS section from the "EAS / Expo Mapping Summary" of each checklist (submit config keys, `expo.ios.infoPlist` additions, service-account key names, `track`, `releaseStatus`, metadata delivery). When absent, state that the artifact is fully manual — every field row already carries its console screen path.
 
 ## Hard rules
 
