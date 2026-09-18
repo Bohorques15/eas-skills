@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="store-metadata skill v1.1.0">
+<meta name="generator" content="store-metadata skill v1.1.1">
 <title>{{APP_NAME}} - {{PLATFORM}} Store Metadata</title>
 <!--
 TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read fully, then fill. Do not remove any instruction text until the block it describes has been processed.
@@ -96,6 +96,7 @@ code {
   padding: 1px 5px;
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   font-size: 12px;
+  overflow-wrap: anywhere;
 }
 .topbar {
   position: sticky;
@@ -106,7 +107,7 @@ code {
   box-shadow: 0 1px 4px rgb(0 0 0 / 8%);
 }
 .topbar-inner {
-  max-width: 1100px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 10px 20px;
   display: flex;
@@ -147,7 +148,7 @@ code {
 .st-inferred { background: var(--inferred-bg); color: var(--inferred-fg); }
 .st-suggested { background: var(--suggested-bg); color: var(--suggested-fg); }
 .st-human { background: var(--human-bg); color: var(--human-fg); }
-main { max-width: 1100px; margin: 0 auto; padding: 24px 20px 60px; }
+main { max-width: 1280px; margin: 0 auto; padding: 24px 20px 60px; }
 .card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -165,6 +166,7 @@ th, td {
   padding: 8px 10px;
   border-bottom: 1px solid var(--line);
   vertical-align: top;
+  overflow-wrap: anywhere;
 }
 thead th {
   font-size: 11.5px;
@@ -175,6 +177,8 @@ thead th {
 }
 td.value { min-width: 220px; max-width: 400px; }
 td.path, td.evidence { color: var(--muted); font-size: 12.5px; }
+td.evidence { width: 42%; }
+td.path { width: 16%; }
 .copy-btn {
   margin-left: 8px;
   font: inherit;
