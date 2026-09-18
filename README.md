@@ -71,6 +71,24 @@ Manual copy works like `eas-app-stores`: copy the whole `skills/store-metadata` 
 
 `store-metadata/index.html` (at the analyzed repo root, or a path you pass) opens in any browser with no network access: sticky summary header, a "Blocking decisions" list, one table per console screen with per-value Copy buttons, collapsible long content, light/dark themes, and a print stylesheet so you can export it to PDF and use it as the submission checklist.
 
+### Visual companions (optional)
+
+When the **archify** skill is installed alongside this pack, `store-metadata` can also generate sidecar diagrams into `store-metadata/diagrams/` and link them from the artifact's "Visual companions" section. This is a soft dependency: archify absent, no evidence for a diagram, or a diagram that fails archify validation → it is silently skipped and the artifact stays complete on its own. Archify is MIT-licensed like this pack, so the licenses are compatible.
+
+| Diagram | Generated when | Supports artifact sections |
+| --- | --- | --- |
+| `data-flow.html` | personal-data collection evidence (auth, payments, push, analytics) | App Privacy · Data Safety |
+| `lifecycle.html` | account-creation evidence (create → use → deletion states) | App Privacy · Data Safety |
+| `review-sequence.html` | reviewer sign-in / demo account needed | App Review Information · App Access |
+| `release-workflow.html` | build/sign/release tooling (`eas.json`, CI, fastlane, gradle signing) | EAS Mapping · Release Mechanics |
+| `permissions-architecture.html` | usage-description keys / dangerous permissions found | Info.plist Usage · AndroidManifest Permissions |
+
+```sh
+npx skills add tt-a1i/archify -g
+```
+
+For fully offline generation, set `ARCHIFY_UPDATE_CHECK_DISABLED=1`. Diagram links are relative, so `index.html` remains offline-viewable alone. Recipes: `skills/store-metadata/references/diagram-recipes.md`.
+
 ## Layout
 
 ```text
