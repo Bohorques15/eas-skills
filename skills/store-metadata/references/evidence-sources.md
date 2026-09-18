@@ -1,6 +1,13 @@
-# Repo Evidence Sources (workflow step 2)
+# Repo Evidence Sources (workflow steps 1–2)
 
 Inventory of what to inspect in the analyzed repository before filling the checklists. Cite every finding as you collect it (`file:line` for tracked sources; full path + generated-output note for prebuild files — see SKILL.md Hard Rules).
+
+## Framework detection signals (step 1)
+
+- Expo: `app.json`, `app.config.ts/js`, `expo` dependency in `package.json`.
+- Bare React Native: `react-native` dependency + `android/`, `ios/` directories.
+- Native iOS: `*.xcodeproj`, `Info.plist`, no JS runtime files.
+- Native Android: `AndroidManifest.xml`, `build.gradle(.kts)`, no JS runtime files.
 
 ## App config (all frameworks)
 
