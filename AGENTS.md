@@ -41,6 +41,7 @@ Load **store-metadata** when the request involves any of:
 
 | Topic | File |
 | --- | --- |
+| Repo evidence inventory + framework detection | `skills/store-metadata/references/evidence-sources.md` |
 | App Store Connect field checklist | `skills/store-metadata/references/ios-metadata-checklist.md` |
 | Google Play Console field checklist | `skills/store-metadata/references/android-metadata-checklist.md` |
 | Output artifact template | `skills/store-metadata/assets/artifact-template.html` |
