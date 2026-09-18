@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="generator" content="store-metadata skill v1.0.1">
+<meta name="generator" content="store-metadata skill v1.1.0">
 <title>{{APP_NAME}} - {{PLATFORM}} Store Metadata</title>
 <!--
 TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read fully, then fill. Do not remove any instruction text until the block it describes has been processed.
@@ -32,6 +32,7 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
    - Style B (long-content row): like A, but the .value cell wraps &lt;details&gt;&lt;summary&gt;{{EXAMPLE_SUMMARY}}&lt;/summary&gt;&lt;div class="long-value"&gt;{{EXAMPLE_LONG_VALUE}}&lt;/div&gt;&lt;/details&gt; with the copy button kept OUTSIDE the details element. Use for descriptions, keyword sets, permission copy, and review notes. Write real newlines inside .long-value; CSS preserves them.
    - Style C (blocking item): &lt;li&gt; entries inside the Blocking decisions &lt;ol&gt;.
    - Style D (EAS row): 3 cells: config key (&lt;code&gt;) | value (.value + copy button) | evidence/notes (.evidence).
+   - Style E (companion row): 4 cells: diagram name | relative link &lt;a href="diagrams/NAME.html"&gt; | supported sections (anchor links into this artifact) | status note (generated / skipped-not-validated, the latter with NO link).
    Status badge markup (exact classes): &lt;span class="badge st-inferred"&gt;INFERRED&lt;/span&gt; , &lt;span class="badge st-suggested"&gt;SUGGESTED&lt;/span&gt; , &lt;span class="badge st-human"&gt;HUMAN REQUIRED&lt;/span&gt;. Badge label text is the canonical English enum in every artifact language; localize only the surrounding prose.
    Evidence cells: for INFERRED rows cite &lt;code&gt;file:line&lt;/code&gt;; for SUGGESTED rows give the rationale; for HUMAN REQUIRED rows state the exact decision needed.
    Placeholder discipline: never emit real-looking URLs, emails, credentials, or account IDs that were not found in the repo. Use example.com-style placeholders and status HUMAN REQUIRED.
@@ -42,10 +43,10 @@ TEMPLATE INSTRUCTIONS FOR THE GENERATING AGENT (store-metadata skill). Read full
    - EAS section (#eas-mapping-section): when EAS/Expo is detected, fill it with style D rows (see the checklist "EAS / Expo Mapping Summary" sections). When not detected, replace its FILL block with a single row stating that this project does not use EAS, that the artifact is complete for fully manual submission, and that each field's "Where to enter it" column is its console screen path; set {{EAS_DETECTED}} to "No".
    - Hint text (&lt;p class="hint"&gt; lines): localize it to the artifact language and minimally adapt it for kept sections — for example, replace a keep-condition hint with the reason the section was kept.
 
-4. OUTPUT. Write the filled document to store-metadata/index.html at the analyzed repo root (or the path given in arguments). Keep it fully self-contained: no external CSS, JS, fonts, or images. Keep lang="en" unless the artifact language differs, in which case update the lang attribute. Write no other file into the analyzed repo.
+4. OUTPUT. Write the filled document to store-metadata/index.html at the analyzed repo root (or the path given in arguments). Keep it fully self-contained: no external CSS, JS, fonts, or images. Keep lang="en" unless the artifact language differs, in which case update the lang attribute. Write no other file into the analyzed repo except optional sidecar diagrams under store-metadata/diagrams/ (see references/diagram-recipes.md).
 
 5. FILL-BLOCK INDEX (block id to checklist section, references/*.md of the store-metadata skill). Blocks tagged [conditional] belong to sections kept only when their hint's keep-condition is met; otherwise delete the whole section per SECTIONS above and record the deletion with its reason in the artifact footer:
-   blocking-decisions (summary of top HUMAN REQUIRED rows) | ios-app-information (iOS §1) | ios-version-listing (iOS §2) | ios-review-information (iOS §3) | ios-pricing (iOS §4) | ios-app-privacy (iOS §5) | ios-health (iOS §6) [conditional] | ios-product-page (iOS §7) | ios-export-compliance (iOS §8) | ios-age-rating (iOS §9) | ios-infoplist-usage (iOS §10) | android-main-store-listing (Android §1) | android-categorization (Android §2) | android-contact-details (Android §3) | android-data-safety (Android §4) | android-advertising-id (Android §5) | android-target-audience (Android §6) | android-ads-declaration (Android §7) | android-financial-features (Android §8) [conditional] | android-government-apps (Android §9) [conditional] | android-health-apps (Android §10) [conditional] | android-app-access (Android §11) | android-permissions (Android §12) | android-release-mechanics (Android §13) | eas-mapping (iOS §11 / Android §14).
+   blocking-decisions (summary of top HUMAN REQUIRED rows) | ios-app-information (iOS §1) | ios-version-listing (iOS §2) | ios-review-information (iOS §3) | ios-pricing (iOS §4) | ios-app-privacy (iOS §5) | ios-health (iOS §6) [conditional] | ios-product-page (iOS §7) | ios-export-compliance (iOS §8) | ios-age-rating (iOS §9) | ios-infoplist-usage (iOS §10) | android-main-store-listing (Android §1) | android-categorization (Android §2) | android-contact-details (Android §3) | android-data-safety (Android §4) | android-advertising-id (Android §5) | android-target-audience (Android §6) | android-ads-declaration (Android §7) | android-financial-features (Android §8) [conditional] | android-government-apps (Android §9) [conditional] | android-health-apps (Android §10) [conditional] | android-app-access (Android §11) | android-permissions (Android §12) | android-release-mechanics (Android §13) | eas-mapping (iOS §11 / Android §14) | visual-companions (diagram-recipes.md) [conditional].
 -->
 <style>
 :root {
@@ -819,6 +820,33 @@ summary { cursor: pointer; font-weight: 600; font-size: 12.5px; }
       </tr>
       -->
       <!-- /FILL:eas-mapping -->
+    </tbody>
+  </table>
+</section>
+
+<section class="card" id="sec-visual-companions">
+  <h2>Visual companions</h2>
+  <p class="hint">Keep only when the archify skill generated at least one validated diagram; otherwise delete this whole section per the SECTIONS rule. Checklist: references/diagram-recipes.md. Row style E.</p>
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Diagram</th>
+        <th scope="col">File</th>
+        <th scope="col">Supported sections</th>
+        <th scope="col">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- FILL:visual-companions -->
+      <!-- Example row (style E, fully worked). Delete this comment and emit one real <tr> per diagram; a skipped-not-validated row carries no link:
+      <tr>
+        <td>Data Flow</td>
+        <td><a href="diagrams/data-flow.html">diagrams/data-flow.html</a></td>
+        <td><a href="#sec-ios-app-privacy">App Privacy</a> · <a href="#sec-android-data-safety">Data Safety</a></td>
+        <td>Generated (archify-validated)</td>
+      </tr>
+      -->
+      <!-- /FILL:visual-companions -->
     </tbody>
   </table>
 </section>

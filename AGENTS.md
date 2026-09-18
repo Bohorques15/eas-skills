@@ -45,8 +45,9 @@ Load **store-metadata** when the request involves any of:
 | App Store Connect field checklist | `skills/store-metadata/references/ios-metadata-checklist.md` |
 | Google Play Console field checklist | `skills/store-metadata/references/android-metadata-checklist.md` |
 | Output artifact template | `skills/store-metadata/assets/artifact-template.html` |
+| Diagram recipes (optional archify sidecars) | `skills/store-metadata/references/diagram-recipes.md` |
 
-EAS is optional for this skill: the artifact is complete for fully manual store submission and adds EAS mappings only when the repo uses EAS/Expo. The skill is read-only on the analyzed repo — the only file written is the artifact. Its checklists are console-form oriented and complement (never duplicate) the EAS-flow references of `eas-app-stores`.
+EAS is optional for this skill: the artifact is complete for fully manual store submission and adds EAS mappings only when the repo uses EAS/Expo. The skill is read-only on the analyzed repo — the only file written is the artifact. Its checklists are console-form oriented and complement (never duplicate) the EAS-flow references of `eas-app-stores`. Visual companions are optional, require the `archify` skill, and never affect artifact completeness; when generated, its sidecar diagrams under `store-metadata/diagrams/` are the only other files written.
 
 ## Related official Expo skills (not in this pack)
 
